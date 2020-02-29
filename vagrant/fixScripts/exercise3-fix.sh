@@ -1,8 +1,8 @@
 #!/bin/bash
 #add fix to exercise3 here
 
-#PERMISSIONS CHANGED IN DEFAULT FILE APACHE SERVER
+#PERMISSIONS HAS BEEN CHANGED IN DEFAULT FILE ON APACHE SERVER
 sudo sed -i 's/deny from all/allow from all/i' /etc/apache2/sites-available/default
 
-#RESTART APACHE SERVER
+#APACHE SERVICE RESTART
 sudo service apache2 restart

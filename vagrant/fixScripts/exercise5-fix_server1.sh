@@ -1,7 +1,8 @@
 #!/bin/bash
 #add fix to exercise5-server1 here
 
-echo "-----BEGIN RSA PRIVATE KEY-----
+#CREATING NEW ID_RSA FILE AND ADD THE PRIVATE KEY INTO THE FILE
+sudo su - vagrant -c 'echo "-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAxyjsnYmaClOD8dSGd5za1CN1NmDoySD0T3SU1IZbQrXyPdL5
 M/+gTCxam8FDgIBL41THF2f2s8WIWrPK+js8l2e/FbQ9Sj2WPGA4Yl+GnvqkGgEr
 p5UAb+ndhCPauRZuUn1FdslkffElDaJhF7YhTtUIzCERar4XChsScIFNxdYUWMjq
@@ -27,13 +28,20 @@ dzaU12wCQwTD/M3bIEKBOcIFrYFRRYMDvosOyCFpFpPcn3GaDmm0JM9jEEXpI9J3
 lqelEQKBgETXXWkEUzC56YLODC7dMYuKgab000fJBKW4+aT6DYiSUxsFggIPv6Wr
 DVPWgDpm+blobjueaVx2B1F1xDPmFojTRtu5e4CzFvLINwTjTkAkuyjuGh9/8NlP
 KhaVZDkTUjplbhQoXBV3yD60coJMeDL+6pbNetmeEG+31+giQH73
------END RSA PRIVATE KEY-----" > $HOME/.ssh/id_rsa
+-----END RSA PRIVATE KEY-----" > /home/vagrant/.ssh/id_rsa'
 
-echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHKOydiZoKU4Px1IZ3nNrUI3U2YOjJIPRPdJTUhltCtfI90vkz/6BMLFqbwUOAgEvjVMcXZ/azxYhas8r6OzyXZ78VtD1KPZY8YDhiX4ae+qQaASunlQBv6d2EI9q5Fm5SfUV2yWR98SUNomEXtiFO1QjMIRFqvhcKGxJwgU3F1hRYyOrSK8r/PyRBNpLqD6KbGCo+/EeUfYfow7pN30LdYZiI1nY3Le/CllHJf38ncrfWaagGCqhSZDhks55TDFwfPVV3NEoutV0++y0CTcyOy6l8Gu6xmVbeFB+5G1xazaePyg22TlD23E2GLnoXkYj2cJ96GqKVihvMzuZKGdqn vagrant@server1" > $HOME/.ssh/id_rsa.pub
+#CREATING NEW ID_RSA.PUB FILE AND ADD THE PUBLIC KEY INTO THE FILE
+sudo su - vagrant -c 'echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHKOydiZoKU4Px1IZ3nNrUI3U2YOjJIPRPdJTUhltCtfI90vkz/6BMLFqbwUOAgEvjVMcXZ/azxYhas8r6OzyXZ78VtD1KPZY8YDhiX4ae+qQaASunlQBv6d2EI9q5Fm5SfUV2yWR98SUNomEXtiFO1QjMIRFqvhcKGxJwgU3F1hRYyOrSK8r/PyRBNpLqD6KbGCo+/EeUfYfow7pN30LdYZiI1nY3Le/CllHJf38ncrfWaagGCqhSZDhks55TDFwfPVV3NEoutV0++y0CTcyOy6l8Gu6xmVbeFB+5G1xazaePyg22TlD23E2GLnoXkYj2cJ96GqKVihvMzuZKGdqn vagrant@server1" > /home/vagrant/.ssh/id_rsa.pub'
 
-cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+#ADD THE PUBLIC KEY INTO THE AUTHORIZED_KEYS FILE - TO ENABLE REMOTE CONNECTION
+sudo su - vagrant -c 'cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys'
 
-sudo chmod 400 $HOME/.ssh/id_rsa
+#SETTING READ PERMISSIONS
+sudo chmod 400 /home/vagrant/.ssh/id_rsa
 
-sudo sed  -i 's/PasswordAuthentication yes/PasswordAuthentication no/i'  /etc/ssh/sshd_config
+#DISABLING SSH LOGIN PASSWORD REQUEST
+sudo sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/i' /etc/ssh/sshd_config
+sudo sed -i '$ a StrictHostKeyChecking no' /etc/ssh/ssh_config
+
+#RESTARTING SSH SERVICE
 sudo service ssh restart

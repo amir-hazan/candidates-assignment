@@ -7,7 +7,7 @@ export server_ip=$(ifconfig | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}
 export file_path=$(echo $@ | awk '{$NF=""}1')
 export file_dest=$(echo $@ | awk '{print $NF}')
 
-#CALC FILES BYES
+#CALCULATE AND DISPLAY THE TOTAL FILES SIZE BYTES
 ls -la $file_path | awk '{total += $5} END {print total}'
 
 #CHECK HOST
@@ -19,7 +19,7 @@ if [ "$server_ip" == "192.168.100.10" ]; then
     #echo "Files will be copied from" $HOSTNAME
 fi
 
-#COPY FILES
+#COPY FILES FROM LOCAL TO REMOTE SERVER
 for i in $file_path; do
     scp $i $myuser@$server_dest:/$file_dest > /dev/null
     #echo "Copying $i from $HOSTNAME: to $server_dest $file_dest"
