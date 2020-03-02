@@ -7,7 +7,7 @@ export server_ip=$(ifconfig | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}
 export file_path=$(echo $@ | awk '{$NF=""}1')
 export file_dest=$(echo $@ | awk '{print $NF}')
 
-#CALCULATE AND DISPLAY THE TOTAL FILES SIZE BYTES
+#CALCULATE AND DISPLAY COPIED FILES SIZE IN BYTES
 ls -la $file_path | awk '{total += $5} END {print total}'
 
 #CHECK HOST
